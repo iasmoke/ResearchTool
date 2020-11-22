@@ -1,0 +1,503 @@
+<h2 class="text-center mt-2 mb-2">Trading Setting</h2>
+<div class="row">
+
+  <div class="row col-6 border-right">
+    <div class="example-container col-6 border-right">
+
+      <mat-form-field appearance="standard">
+        <mat-label>Threads</mat-label>
+        <input matInput type="number" disabled [(ngModel)]="threads">
+      </mat-form-field>
+
+      <section class="example-section">
+        <label class="mr-2">Straight trading logic</label>
+        <mat-checkbox labelPosition="after" [(ngModel)]="straight_logic"
+          (ngModelChange)="changeSetting('straight_logic', straight_logic === true ? 'true' : 'false')">
+        </mat-checkbox>
+      </section>
+      <div [formGroup]="tradingSetting.Form1" class="example-container">
+        <mat-form-field appearance="standard">
+          <mat-label>Start deposit</mat-label>
+          <input matInput type="number" [(ngModel)]='start_deposit' formControlName="startDeposit"
+            (ngModelChange)="changeSetting('start_deposit',start_deposit)">
+          <mat-hint align="end">100 - 1000000</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.f.startDeposit.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.startDeposit.errors?.min">Minimum value 100</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.startDeposit.errors?.max">Maximum  value 1000000</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.startDeposit.errors?.pattern">Only integer up to 7 characters</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Min trades quantity value filter</mat-label>
+          <input matInput type="number" [(ngModel)]="min_trade_quantity"
+            formControlName="minTradeQuantity"
+            (ngModelChange)="changeSetting('min_trade_quantity', min_trade_quantity)">
+          <mat-hint align="end">1-5000</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.f.minTradeQuantity.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.minTradeQuantity.errors?.min">Minimum value 1</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.minTradeQuantity.errors?.max">Maximum  value 5000</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.minTradeQuantity.errors?.pattern">Only integer up to 4 characters</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Volume per lot</mat-label>
+          <input matInput type="number" [(ngModel)]="volume_per_lot" formControlName="volumePerLot"
+            (ngModelChange)="changeSetting('volume_per_lot', volume_per_lot)">
+          <mat-hint align="end">1 - 1000000</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.f.volumePerLot.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.volumePerLot.errors?.min">Minimum value 1</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.volumePerLot.errors?.max">Maximum  value 1000000</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.volumePerLot.errors?.pattern">Only integer up to 7 characters</mat-error>
+        </mat-form-field>
+      </div>
+      <section class="example-section">
+        <label class="mr-2">Use time filter</label>
+        <mat-checkbox labelPosition="after" [(ngModel)]="use_time_filter"
+          (ngModelChange)="changeSetting('use_time_filter', use_time_filter === true ? 'true' : 'false')">
+        </mat-checkbox>
+      </section>
+
+      <mat-form-field *ngIf="use_time_filter">
+        <mat-label>Resample timeframe</mat-label>
+        <mat-select [(ngModel)]="resample_timeframe"
+          (ngModelChange)="changeSetting('resample_timeframe', resample_timeframe.toString())"
+          [ngModelOptions]="{standalone: true}">
+          <mat-option value="30m">30m</mat-option>
+          <mat-option value="1h">1h</mat-option>
+          <mat-option value="4h">4h</mat-option>
+          <mat-option value="12h">12h</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="example-container col-6">
+
+      <div [formGroup]="tradingSetting.Form1" class="example-container">
+        <mat-form-field appearance="standard">
+          <mat-label>Data split periods number</mat-label>
+          <input matInput type="number" [(ngModel)]="periods_number" formControlName="periodsNumber"
+            (ngModelChange)="changeSetting('periods_number', periods_number)">
+          <mat-hint align="end">2-100</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.f.periodsNumber.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.periodsNumber.errors?.min">Minimum value 2</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.periodsNumber.errors?.max">Maximum  value 100</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.periodsNumber.errors?.pattern">Only integer up to 3 characters</mat-error>
+        </mat-form-field>
+      </div>
+
+      <section class="example-section">
+        <label class="mr-2">Reversed trading logic</label>
+        <mat-checkbox labelPosition="after" [(ngModel)]="reversed_logic" 
+          (ngModelChange)="changeSetting('reversed_logic',reversed_logic === true ? 'true' : 'false')">
+        </mat-checkbox>
+      </section>
+
+      <div [formGroup]="tradingSetting.Form1" class="example-container">
+
+        <mat-form-field appearance="standard">
+          <mat-label>Min PF value filter</mat-label>
+          <input matInput type="number" step="0.1" [(ngModel)]="min_pf_to_filter" formControlName="minPFtoFilter"
+            (ngModelChange)="changeSetting('min_pf_to_filter', min_pf_to_filter)">
+          <mat-hint align="end">0-100.0</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.f.minPFtoFilter.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.minPFtoFilter.errors?.min">Minimum value 0</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.minPFtoFilter.errors?.max">Maximum  value 100.0</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.minPFtoFilter.errors?.pattern">Threads is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Max DD filter</mat-label>
+          <input matInput type="number" [(ngModel)]="max_dd_filter" formControlName="maxDDfilter"
+            (ngModelChange)="changeSetting('max_dd_filter', max_dd_filter)">
+          <mat-hint align="end">1-100</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.f.maxDDfilter.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.maxDDfilter.errors?.min">Minimum value 1</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.maxDDfilter.errors?.max">Maximum  value 100</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.maxDDfilter.errors?.pattern">Only integer up to 3 characters</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Commission per lot</mat-label>
+          <input matInput type="number" step="0.1" [(ngModel)]="commission_per_lot" formControlName="commissionPerLot"
+            (ngModelChange)="changeSetting('commission_per_lot', commission_per_lot)">
+          <mat-hint align="end">0-1000.0</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.f.commissionPerLot.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.commissionPerLot.errors?.min">Minimum value 0</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.commissionPerLot.errors?.max">Maximum  value 1000.0</mat-error>
+          <mat-error *ngIf="!!tradingSetting.f.commissionPerLot.errors?.pattern">Threads is required</mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <section class="example-section">
+        <label class="mr-2">Use vola filter</label>
+        <mat-checkbox labelPosition="after" [(ngModel)]="use_vola_filter"
+          (ngModelChange)="changeSetting('use_vola_filter', use_vola_filter === true ? 'true' : 'false')">
+        </mat-checkbox>
+      </section>
+
+      <mat-form-field *ngIf="use_vola_filter">
+        <mat-label>Vola filter side</mat-label>
+        <mat-select [(ngModel)]="vola_filter_side" [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="changeSetting('vola_filter_side', vola_filter_side)">
+          <mat-option value="less">less</mat-option>
+          <mat-option value="more">more</mat-option>
+        </mat-select>
+      </mat-form-field>
+     
+      <div *ngIf="use_vola_filter" [formGroup]="tradingSetting.FormUse" class="example-container">
+
+
+        <mat-form-field appearance="standard">
+          <mat-label>Window ATR</mat-label>
+          <input matInput type="number" maxlength="4" [(ngModel)]="window_atr" formControlName="windowAtr"
+            (ngModelChange)="changeSetting('window_atr', window_atr)">
+          <mat-hint align="end">1-5000</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.u.windowAtr.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.windowAtr.errors?.min">Minimum value 1</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.windowAtr.errors?.max">Maximum  value 5000</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.windowAtr.errors?.pattern">Only integer up to 4 characters</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" >
+          <mat-label>Window decil</mat-label>
+          <input matInput type="number" maxlength="4" [(ngModel)]="window_decil" formControlName="windowDecil"
+            (ngModelChange)="changeSetting('window_decil', window_decil)">
+          <mat-hint align="end">1-5000</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.u.windowDecil.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.windowDecil.errors?.min">Minimum value 1</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.windowDecil.errors?.max">Maximum  value 5000</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.windowDecil.errors?.pattern">Only integer up to 4 characters</mat-error>
+        </mat-form-field>
+     
+        <mat-form-field appearance="standard">
+          <mat-label>Vola filter value</mat-label>
+          <input matInput type="number"
+            [(ngModel)]="vola_filter_value" formControlName="volaFilterValue"
+            (ngModelChange)="changeSetting('vola_filter_value', vola_filter_value)">
+          <mat-hint align="end">0-11</mat-hint>
+          <mat-error *ngIf="!!tradingSetting.u.volaFilterValue.errors?.required">Threads is required</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.volaFilterValue.errors?.min">Minimum value </mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.volaFilterValue.errors?.max">Maximum  value 11</mat-error>
+          <mat-error *ngIf="!!tradingSetting.u.volaFilterValue.errors?.pattern">Only integer up to 2 characters</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="col">
+      <h5 class="text-center">Trading Logic</h5>
+    </div>
+    <div class="row ml-auto">
+      <div class="example-container-logic col-6 border-right">
+        <section class="example-section">
+          <label
+            title="Вход и выход на основе сигналов полученных из таргета + фичей. Принятие решений на вход и на выход из сделки, основано только на сигналах на вход и на выход из таргета и фичей"
+            class="mr-2">
+            1.Target Logic </label>
+          <mat-checkbox class="ml-auto" labelPosition="after" [(ngModel)]="system_to_use_1"
+            (ngModelChange)="changeSetting('system_to_use_1',system_to_use_1 === true ? 'true' : 'false')">
+          </mat-checkbox>
+          <button mat-icon-button disabled color="primary">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </section>
+
+        <section class="example-section">
+          <label
+            title="Вход выполняется всегда на основе сигнала на вход из таргет+фичи, а выход на основе уровней Take Profit и Stop Loss, которые должны быть согласованы с нашим Target."
+            class="mr-2">
+            2.TP/SL</label>
+          <mat-checkbox class="ml-auto" labelPosition="after" [(ngModel)]="system_to_use_2"
+            (ngModelChange)="changeSetting('system_to_use_2',system_to_use_2 === true ? 'true' : 'false')">
+          </mat-checkbox>
+          <button mat-icon-button [disabled]="system_to_use_2 === false" data-toggle="modal"
+            data-target="#system_to_use_2" color="primary">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </section>
+
+        <!-- modal -->
+        <div class="modal fade" id="system_to_use_2" tabindex="-1" aria-labelledby="exampleModalLongTitle"
+          aria-hidden="true">
+          <div class="modal-dialog" id="system_to_use_2" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">TP/SL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="col example-container-tl" *ngFor="let trading_logic_2_row of trading_logic_2">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{trading_logic_2_row.description}}</mat-label>
+                    <input matInput type="number" [(ngModel)]="trading_logic_2_row.value" step="0.1"
+                      (ngModelChange)="tradingLogicUpdate2(trading_logic_2_row)" ngDefaultControl
+                      [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <section class="example-section">
+          <label
+            title="Вход выполняется всегда на основе сигнала на вход из таргет+фичи, а выход на основе уровней Take Profit и Stop Loss, которые должны быть согласованы с нашим Target, но в случае достижения уровня SL, позиция закрывается и открывается еще одна, но с повышенным объемом в Х раз, и закрывается она либо по новому TP который одинаковый с первоначальным значением, либо по SL, который также равен начальному.Такой метод может быть полезен, при различных MM systems, которые периодически выносят резким ценовым движением.Это ветка shot vol system."
+            class="mr-2">
+            3.TP/SL with hedge</label>
+          <mat-checkbox class="ml-auto" labelPosition="after" [(ngModel)]="system_to_use_3"
+            (ngModelChange)="changeSetting('system_to_use_3',system_to_use_3 === true ? 'true' : 'false')">
+          </mat-checkbox>
+          <button mat-icon-button [disabled]="system_to_use_3 === false" data-toggle="modal"
+            data-target="#system_to_use_3" color="primary">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </section>
+
+        <!--modal-->
+        <div class="modal fade" id="system_to_use_3" tabindex="-1" aria-labelledby="exampleModalLongTitle"
+          aria-hidden="true">
+          <div class="modal-dialog" id="system_to_use_3" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">TP/SL with hedge</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="max-height: 500px;overflow: auto;">
+                <div class="col example-container-tl" *ngFor="let trading_logic_3_row of trading_logic_3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{trading_logic_3_row.description}}</mat-label>
+                    <input matInput step="0.1" type="number" [(ngModel)]="trading_logic_3_row.value"
+                      (ngModelChange)="tradingLogicUpdate3(trading_logic_3_row)" ngDefaultControl
+                      [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="example-container-logic col">
+
+        <section class="example-section">
+          <label
+            title="Суть заключается в том, что уровень фиксации, твоей прибыли динамически подтягивается за движением цены в зависимости от текущего уровня волатильности. Это удобный и хороший метод, который отличается особой стабильностью за счет своей адаптивности."
+            class="mr-2">
+            4.Dynamic SL</label>
+          <mat-checkbox class="ml-auto" labelPosition="after" [(ngModel)]="system_to_use_4"
+            (ngModelChange)="changeSetting('system_to_use_4',system_to_use_4 === true ? 'true' : 'false')">
+          </mat-checkbox>
+          <button mat-icon-button [disabled]="system_to_use_4 === false" data-toggle="modal"
+            data-target="#system_to_use_4" color="primary">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </section>
+
+        <div class="modal fade" id="system_to_use_4" tabindex="-1" aria-labelledby="exampleModalLongTitle"
+          aria-hidden="true">
+          <div class="modal-dialog" id="system_to_use_4" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Dynamic SL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="col example-container-tl" *ngFor="let trading_logic_4_row of trading_logic_4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{trading_logic_4_row.description}}</mat-label>
+                    <input matInput step="0.1" type="number" [(ngModel)]="trading_logic_4_row.value"
+                      (ngModelChange)="tradingLogicUpdate4(trading_logic_4_row)" ngDefaultControl
+                      [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="example-section">
+          <label
+            title="Позиция не закрывается в убыток до тех пор, пока на протяжении определенного ограниченного количества раз не будет положительная позиция, в месте с закрытием которой закроются все остальные. Каждая последующая позиция открывается с повышенным объемом с коэффициентом Х."
+            class="mr-2">
+            5.Х volume</label>
+          <mat-checkbox class="ml-auto" labelPosition="after" [(ngModel)]="system_to_use_5"
+            (ngModelChange)="changeSetting('system_to_use_5',system_to_use_5 === true ? 'true' : 'false')">
+          </mat-checkbox>
+          <button mat-icon-button [disabled]="system_to_use_5 === false" data-toggle="modal"
+            data-target="#system_to_use_5" color="primary">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </section>
+
+        <!--Modal-->
+        <div class="modal fade" id="system_to_use_5" tabindex="-1" aria-labelledby="exampleModalLongTitle"
+          aria-hidden="true">
+          <div class="modal-dialog" id="system_to_use_5" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Х volume</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body bg-light">
+                <div class="col example-container-tl" *ngFor="let trading_logic_5_row of trading_logic_5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{trading_logic_5_row.description}}</mat-label>
+                    <input matInput step="0.1" type="number" [(ngModel)]="trading_logic_5_row.value"
+                      (ngModelChange)="tradingLogicUpdate5(trading_logic_5_row)" ngDefaultControl
+                      [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="example-section">
+          <label
+            title="Система маркетмейкинга, в которой выстраивается сетка ордеров с ограниченным количеством уровней, фиксированным расстоянием между ними, с коэффициентами по объему позиции и с защитным уровнем SL для фиксации всего вместе с tail."
+            class="mr-2">
+            6.MM system</label>
+          <mat-checkbox class="ml-auto" labelPosition="after" [(ngModel)]="system_to_use_6"
+            (ngModelChange)="changeSetting('system_to_use_6',system_to_use_6 === true ? 'true' : 'false')">
+          </mat-checkbox>
+          <button mat-icon-button [disabled]="system_to_use_6 === false" data-toggle="modal"
+            data-target="#system_to_use_6" color="primary">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </section>
+
+        <!--Modal-->
+        <div class="modal fade" id="system_to_use_6" tabindex="-1" aria-labelledby="exampleModalLongTitle"
+          aria-hidden="true">
+          <div class="modal-dialog" id="system_to_use_6" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">MM system</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="max-height: 500px;overflow: auto;">
+                <div class="col example-container-tl" *ngFor="let trading_logic_6_row of trading_logic_6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{trading_logic_6_row.description}}</mat-label>
+                    <input matInput step="0.1" type="number" [(ngModel)]="trading_logic_6_row.value"
+                      (ngModelChange)="tradingLogicUpdate6(trading_logic_6_row)" ngDefaultControl
+                      [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <section class="example-section">
+          <label title="Вход по сигналу, выход через определенное количество свечей." class="mr-2">
+            7.Time Exit</label>
+          <mat-checkbox class="ml-auto" labelPosition="after" [(ngModel)]="system_to_use_7"
+            (ngModelChange)="changeSetting('system_to_use_7',system_to_use_7 === true ? 'true' : 'false')">
+          </mat-checkbox>
+          <button mat-icon-button [disabled]="system_to_use_7 === false" data-toggle="modal"
+            data-target="#system_to_use_7" color="primary">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        </section>
+
+        <div class="modal fade" id="system_to_use_7" tabindex="-1" aria-labelledby="exampleModalLongTitle"
+          aria-hidden="true">
+          <div class="modal-dialog" id="system_to_use_7" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Time Exit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="col example-container-tl" *ngFor="let trading_logic_7_row of trading_logic_7">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{trading_logic_7_row.description}}</mat-label>
+                    <input matInput step="0.1" type="number" [(ngModel)]="trading_logic_7_row.value"
+                      (ngModelChange)="tradingLogicUpdate7(trading_logic_7_row)" ngDefaultControl
+                      [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" style="height: 500px; overflow: auto;">
+      <h5 class="text-center" title="Spread - разница между ценой покупки и продажи">Spread</h5>
+      <div class="row ml-auto example-container-spread">
+        <div *ngFor="let row of spread;let i = index;">
+          <mat-form-field appearance="outline">
+            <mat-label>from</mat-label>
+            <input matInput type="time" [(ngModel)]="row.spread_from" (ngModelChange)="spreadUpdate(i)"
+              [ngModelOptions]="{standalone: true}">
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>to</mat-label>
+            <input matInput type="time" [(ngModel)]="row.spread_to" (ngModelChange)="spreadUpdate(i)"
+              [ngModelOptions]="{standalone: true}">
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="legacy">
+            <mat-label>value</mat-label>
+            <input matInput type="number" step="0.00001" [(ngModel)]="row.spread_value"
+              (ngModelChange)="spreadUpdate(i)">
+            <mat-hint align="end">0-100.00000</mat-hint>
+            <mat-error>Value 0 and 100.00000</mat-error>
+          </mat-form-field>
+
+          <button [class.btn-outline-danger]="i > 0" class="btn btn-outline-secondary" type="button"
+            (click)="i > 0 ? removeSpread(i) : addSpread(i)">
+            <span>{{ i === 0 ? '+' : '-' }}</span>
+
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+<div class="text-center" class="col-4">
+  <h3>Text Progress</h3>
+  <pre *ngFor="let row_text_csv of text_csv">{{row_text_csv}}</pre>
+</div>
+</div>
+</div>
+-->

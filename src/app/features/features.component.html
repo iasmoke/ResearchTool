@@ -1,0 +1,195 @@
+<div class="container-fluid mt-2">
+  <div class="row d-flex justify-content-between">
+    <div id="myModalError_feature" class="modal fade">
+      <div class="modal-dialog">
+        <div class="alert alert-success text-center" role="alert">{{ feature_error }}</div>
+      </div>
+    </div>
+    <h2>Features</h2>
+    <button mat-raised-button data-toggle="modal" data-target=".create-feature">Create</button>
+
+    <div class="modal fade create-feature" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Create features</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!--alert-->
+            <div [hidden]="feature_error === undefined || feature_error === 'Feature added successfully'"
+              class="alert alert-danger col-3">{{ feature_error }}
+            </div>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Feature name</mat-label>
+              <input matInput [(ngModel)]="newFeature['feature_name']" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="margin-left: 10px;">
+              <mat-label>Parameter description</mat-label>
+              <input matInput [(ngModel)]="newFeature['description']" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-checkbox *ngIf="isHidden" class="ml-3" [(ngModel)]="def_feature">Def target</mat-checkbox>
+
+
+            <div class="example-container-target-feature"
+              *ngFor="let row_feature of newFeature.parameter;let i = index">
+
+              <mat-form-field appearance="outline">
+                <mat-label>Parameter name</mat-label>
+                <input matInput [(ngModel)]="row_feature.parameter_name" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Variable name</mat-label>
+                <input matInput [(ngModel)]="row_feature.variable_name" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+
+              <mat-form-field style="width: 7rem;" appearance="outline">
+                <mat-label>Start value</mat-label>
+                <input matInput type="number" [(ngModel)]="row_feature.start_value"
+                  [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+
+              <mat-form-field style="width: 7rem;" appearance="outline">
+                <mat-label>End value</mat-label>
+                <input matInput type="number" [(ngModel)]="row_feature.end_value" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+
+              <mat-form-field style="width: 7rem;" appearance="outline">
+                <mat-label>Step value</mat-label>
+                <input matInput type="number" [(ngModel)]="row_feature.step_value"
+                  [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+
+              <mat-form-field style="width: 7rem;">
+                <mat-label>Type</mat-label>
+                <mat-select [(ngModel)]="row_feature.type" [ngModelOptions]="{standalone: true}">
+                  <mat-option value="int">int</mat-option>
+                  <mat-option value="float">float</mat-option>
+                  <mat-option value="boolean">boolean</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button [class.btn-outline-danger]="i > 0" mat-stroked-button
+                (click)="i > 0 ? RemoveFeature(i) : addParameterFeature()">
+                <span>{{ i === 0 ? '+' : '-' }}</span>
+              </button>
+
+            </div>
+
+            <mat-card *ngIf="read_open">
+              <pre style="max-height: 400px">{{file_read}}</pre>
+            </mat-card>
+
+            <div class="modal-footer">
+              <button mat-raised-button [disabled]="FileForm.value.File_feature === ''" (click)="readPy()">Read</button>
+              <button mat-raised-button class="mr-1" [disabled]="FileForm.value.File_feature === ''"
+                (click)="autoFill()">Fill</button> - <a class="mr-auto" href="assets/file/template.py"
+                download="template.py">File template</a>
+
+              <form class="form-control-inline row" [formGroup]="FileForm" (ngSubmit)="upload(File_feature.value)">
+                <input #File_feature id="File_feature" type="file" accept=".py" formControlName="File_feature" >
+
+                <button mat-raised-button color="primary" type="submit"
+                  [disabled]="FileForm.value.File_feature === '' || newFeature['feature_name'] === undefined">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<mat-form-field class="col">
+  <mat-label>Select features</mat-label>
+  <mat-select [(ngModel)]="feature_name" (ngModelChange)="selectFeature()">
+    <mat-option [value]="row" *ngFor="let row of features_name">
+      {{ row }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+
+<select multiple class="form-control" style="height: 350px" [(ngModel)]="features_set_name_get"
+  (dblclick)="selectFeaturesSet()">
+  <option [value]="row_features_set_name" *ngFor="let row_features_set_name of features_set_name ;">{{row_features_set_name}}</option>
+</select>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="featureSetSettings">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{features_set_name_get}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="example-container-target-feature" *ngFor="let row_features_set_settings of features_set_settings">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Parameter name</mat-label>
+            <input matInput disabled [(ngModel)]="row_features_set_settings.parameter_name"
+             [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Variable name</mat-label>
+            <input matInput disabled [(ngModel)]="row_features_set_settings.value_name"
+             [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 7rem;" appearance="outline">
+            <mat-label>Start value</mat-label>
+            <input matInput type="number" [(ngModel)]="row_features_set_settings.start_value"
+            (ngModelChange)="UpdateFeaturesSet(row_features_set_settings)" [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 7rem;" appearance="outline">
+            <mat-label>End value</mat-label>
+            <input matInput type="number" [(ngModel)]="row_features_set_settings.stop_value"
+            (ngModelChange)="UpdateFeaturesSet(row_features_set_settings)" [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 7rem;" appearance="outline">
+            <mat-label>Step value</mat-label>
+            <input matInput type="number" [(ngModel)]="row_features_set_settings.step_value"
+            (ngModelChange)="UpdateFeaturesSet(row_features_set_settings)" [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 7rem;">
+            <mat-label>Type</mat-label>
+            <mat-select [(ngModel)]="row_features_set_settings.type" (ngModelChange)="UpdateFeaturesSet(row_features_set_settings)"
+             [ngModelOptions]="{standalone: true}">
+              <mat-option value="int">int</mat-option>
+              <mat-option value="float">float</mat-option>
+              <mat-option value="boolean">boolean</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <mat-card>
+          <pre style="max-height: 400px">{{textFile}}</pre>
+        </mat-card>
+      </div>
+      <div class="modal-footer">
+        <button mat-raised-button color="warn" class="mr-auto" (click)="deleteFeaturesSet()">Delete</button>
+        <button mat-raised-button data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

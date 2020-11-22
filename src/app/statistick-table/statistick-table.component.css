@@ -1,0 +1,33 @@
+.mat-elevation-z8 {
+  max-height: 760px;
+  overflow: scroll;
+  margin-bottom: 60px;
+}
+table {
+  width: 100%;
+}
+.mat-cell, .mat-footer-cell {
+  font-size: 12px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: #777;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #3a4be6;
+}
+#chartdiv_statistick {
+  width: 100%; 
+  height: 560px;
+}
+.mat-progress-spinner {
+  display: block;
+  position: absolute !important;
+  top: 46%;
+  right: 50%;
+}

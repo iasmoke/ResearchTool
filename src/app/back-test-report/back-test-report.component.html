@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="col-5">
+    <h3 class="text-center">My backtest</h3>
+
+    <mat-form-field class="mb-2">
+      <mat-select [(ngModel)]="backtest_name" (ngModelChange)="changeBacktestSettings()">
+        <mat-option [value]="row_backtest_id.backtest_id" *ngFor="let row_backtest_id of backtest_id">
+          Backtest #{{ row_backtest_id.backtest_id }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-card style="height: 700px; width: 100%; overflow: auto;margin-bottom: 65px;">
+        <pre>{{ backtest_parse }}</pre>
+    </mat-card>
+
+  </div>
+</div>

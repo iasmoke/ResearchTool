@@ -1,0 +1,9 @@
+.example-container-target-feature > * {
+    font-size: 14px;
+    display: inline-block;
+  }
+.example-container-target-feature mat-form-field {
+    margin-right: 3px;
+   
+  }
+  

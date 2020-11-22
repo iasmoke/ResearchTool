@@ -1,0 +1,65 @@
+/* .bg-blue {
+   background-color: #A9A9A9;
+}
+.nav-pills > li.nav-item > a.nav-link.active, 
+.nav-pills > li.nav-item > a.nav-link.active:focus, 
+.nav-pills > li.nav-item > a.nav-link.active:hover {
+  background-color:#292929;
+  color: #A9A9A9;
+}
+.btn-gray {
+  background-color: #292929;
+  color: #A9A9A9;
+} */
+
+.badge {
+  position: absolute;
+  top: -30%;
+  left: 85%;
+  font-size: 11px;
+  line-height: 15px;
+  border-radius: 50%;
+  max-height: 36px;
+  width: 18px;
+  background-color: #28a745;
+  color: #ffffff;
+  text-align: center;
+}
+.fixed-bottom {
+  z-index: 1000;
+}
+.modal-err {
+  position: fixed;
+  left: 35%;
+  top: 82%;
+  z-index: 1050;
+  display: none;
+  width: 100%;
+  height: 100%;
+  outline: 0;
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+}
+.alert{
+  margin: 20px;
+  z-index: 1050;
+  padding: 1rem 1.5rem;
+  border-radius: 0.25rem;
+}
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+.alert-dismissible .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.15rem 0.1rem;
+  color: inherit;
+}

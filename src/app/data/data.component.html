@@ -1,0 +1,135 @@
+<div class="mt-2 row col">
+  <h2>Data</h2>
+
+  <mat-icon class="icon-influxdb-true" *ngIf="connect_true">cloud_done</mat-icon>
+
+  <mat-icon class="icon-influxdb-false" *ngIf="connect_false">cloud_off</mat-icon>
+
+</div>
+<mat-form-field class="col">
+  <mat-label>Select data type</mat-label>
+  <mat-select [(ngModel)]="data_type" (ngModelChange)="changeDataType();selectChange1()">
+    <mat-option [value]="row_currencyMarket" *ngFor="let row_currencyMarket of currencyMarket">
+      {{row_currencyMarket}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<!-- <div class="col-auto my-1">
+  <label class="mr-sm-2">Select data type</label>
+  <select class="custom-select mr-sm-2" [(ngModel)]="data_type" (ngModelChange)="changeDataType();selectChange1()">
+    <option selected [hidden]="data_type !== null"></option>
+    <option [value]="row_currencyMarket" *ngFor="let row_currencyMarket of currencyMarket">{{ row_currencyMarket }}
+    </option>
+  </select>
+</div> -->
+<mat-form-field class="col">
+  <mat-label>Select data time type</mat-label>
+  <mat-select [(ngModel)]="timeframe_type" (ngModelChange)="changeTimeFrameType(); selectChange2();selectChange3()"
+    [disabled]="(data_type === undefined) || (data_type === null)" >
+    <mat-option [value]="time" *ngFor="let time of dataTime">
+      {{time}}
+   </mat-option>
+  </mat-select>
+</mat-form-field>
+<!-- <div class="col-auto my-1">
+  <label class="mr-sm-2">Select data time type</label>
+  <select class="custom-select mr-sm-2" [(ngModel)]="timeframe_type" (ngModelChange)="changeTimeFrameType(); selectChange2()"
+    [disabled]="(data_type === undefined) || (data_type === null)">
+    <option selected value="" [hidden]="(data_type !== undefined) || (data_type !== null)"></option>
+    <option [value]="time" *ngFor="let time of dataTime">{{ time }}</option>
+  </select>
+</div> -->
+
+<mat-form-field class="col">
+  <input type="text" placeholder="Select ticker" matInput [formControl]="onTicker" [(ngModel)]='ticker' (ngModelChange)="changeTimeFrame()"
+  disableRipple="(timeframe_type === undefined) || (timeframe_type === null)" [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      {{ option }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+
+<mat-form-field class="col">
+  <mat-label>Select sources</mat-label>
+  <mat-select [(ngModel)]="sources" (ngModelChange)="changeSource();selectChange4();"
+    [disabled]="(ticker === undefined) || (ticker === null)">
+    <mat-option [value]="row_sourceArray" *ngFor="let row_sourceArray of sourceArray">
+      {{ row_sourceArray }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<!-- <div class="col-auto my-1">
+  <label class="mr-sm-2">Select sources</label>
+  <select class="custom-select mr-sm-2" [(ngModel)]="sources" (ngModelChange)="changeSource();selectChange4()"
+  [disabled]="(ticker === undefined) || (ticker === null)">
+  <option selected value="" [hidden]="(ticker !== null) || (ticker !== undefined)"></option>
+  <option [value]="row_sourceArray" *ngFor="let row_sourceArray of sourceArray">{{row_sourceArray}}</option>
+  </select>
+</div> -->
+<mat-form-field class="col">
+  <mat-label>Select data timeframe</mat-label>
+  <mat-select [(ngModel)]="timeframe" (ngModelChange)="changeTime();getDateDB()"
+    [disabled]="(sources === undefined) || (sources === null)" [disableOptionCentering]="true" >
+    <mat-option [value]="frame" *ngFor="let frame of dataTimeFrame" [hidden]="frame === null">
+      {{ frame }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<!-- <div class="col-auto my-1 mb-2">
+  <label class="mr-sm-2">Select data timeframe</label>
+  <select class="custom-select mr-sm-2" [(ngModel)]="timeframe" (ngModelChange)="changeTime()"
+    [disabled]="(sources === undefined) || (sources === null)">
+    <option selected value="Choose" [hidden]="(sources !== null) || (sources !== undefined)"></option>
+    <option [value]="frame" *ngFor="let frame of dataTimeFrame">{{ frame }}</option>
+  </select>
+</div> -->
+<mat-form-field class="col-auto my-1 mb-2">
+  <input [disabled]="(timeframe === undefined) || (timeframe === null)" matInput [min]="minDate" [max]="maxDate"
+    [matDatepicker]="picker" [(ngModel)]="start_date" (ngModelChange)="dateUpdate('start_date', start_date)"
+    placeholder="Start date">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+<!-- <mat-form-field>
+  <input matInput [matDatepicker]="myDatePicker" [(ngModel)]="start_date" 
+  (ngModelChange)="dateUpdate('start_date', start_date.toString())"
+  placeholder="Choose a date">
+  <mat-datepicker-toggle [for]="myDatePicker" matSuffix></mat-datepicker-toggle>
+  <mat-datepicker #myDatePicker ></mat-datepicker>
+</mat-form-field> -->
+<mat-form-field class="col-auto my-1 mb-2">
+  <input [disabled]="(timeframe === undefined) || (timeframe === null)" matInput [min]="minDate" [max]="maxDate"
+    [matDatepicker]="picker1" [(ngModel)]="end_date" (ngModelChange)="dateUpdate('end_date', end_date)"
+    placeholder="End date">
+  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+</mat-form-field>
+<!-- <div class="col-auto mr-sm-2">
+  <label class="mr-sm-2">Start date</label>
+  <input matInput type="date" [(ngModel)]="start_date"
+    (ngModelChange)="dateUpdate('start_date', start_date.toString())">
+</div>
+<div class="col-auto mb-2 mr-sm-2">
+  <label class="mr-sm-2">End date</label>
+  <input matInput type="date" [(ngModel)]="end_date"
+    (ngModelChange)="dateUpdate('end_date', end_date.toString())">
+</div> -->
+<button mat-raised-button
+  [disabled]="(timeframe === undefined) || (timeframe === null) || (dataService.disabledOpenGraph)" color="primary"
+  class="btn-block" (click)="openModalGraph()">Open graph<mat-spinner class="ml-2" color="accent" [diameter]="20" *ngIf="dataGraph"></mat-spinner>
+</button>
+
+<div #graph_main id="graph_main" class="modal">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div id="chartdiv_main"></div>
+      </div>
+      <div class="modal-footer">
+        <button mat-raised-button data-dismiss="modal" (click)="boolfunOpenGraph()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

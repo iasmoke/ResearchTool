@@ -1,0 +1,201 @@
+<mat-form-field class="col-2 mt-2">
+  <mat-label>Backtest ID</mat-label>
+  <mat-select [(ngModel)]="backtest_id" (ngModelChange)="selectBacktestId()">
+    <mat-option [value]="listBacktestId_row" *ngFor="let listBacktestId_row of listBacktestId">
+     Backtest_id #{{listBacktestId_row}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field class="col-2 mt-2">
+  <mat-label>Filter Column</mat-label>
+  <mat-select [(ngModel)]="column_name">
+    <mat-option [value]="displayedColumns_row" *ngFor="let displayedColumns_row of displayedColumns">
+      {{displayedColumns_row}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field class="col-2 mt-2">
+  <input matInput (keyup)="applyFilter($event.target.value)" [disabled]="column_name === undefined || null" placeholder="Filter">
+</mat-form-field>
+
+
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort >
+
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>code</th>
+      <td mat-cell *matCellDef="let row" class="text-center"> {{row.code}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="period">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>period</th>
+      <td mat-cell *matCellDef="let row">{{row.period}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="trading_logic" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>trading_logic</th>
+      <td mat-cell *matCellDef="let row" class="text-center"> {{row.trading_logic}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="reverse_logic">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>reverse_logic</th>
+      <td mat-cell *matCellDef="let row" > {{row.reverse_logic}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="pf">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>pf</th>
+      <td mat-cell *matCellDef="let row" > {{row.pf}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="side">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>side</th>
+      <td mat-cell *matCellDef="let row" > {{row.side}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="total_profit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>total_profit</th>
+      <td mat-cell *matCellDef="let row" class="text-center"> {{row.total_profit}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="average_profit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>average_profit</th>
+      <td mat-cell *matCellDef="let row" > {{row.average_profit}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="average_loss">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>average_loss</th>
+      <td mat-cell *matCellDef="let row" > {{row.average_loss}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="probability_profit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>probability_profit</th>
+      <td mat-cell *matCellDef="let row" > {{row.probability_profit}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="probability_loss">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>probability_loss</th>
+      <td mat-cell *matCellDef="let row" class="text-center"> {{row.probability_loss}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity_of_trades">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>quantity_of_trades</th>
+      <td mat-cell *matCellDef="let row" > {{row.quantity_of_trades}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="std">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>std</th>
+      <td mat-cell *matCellDef="let row" > {{row.std}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="max_dd">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>max_dd</th>
+      <td mat-cell *matCellDef="let row" > {{row.max_dd}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="time_filter">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>time_filter</th>
+      <td mat-cell *matCellDef="let row" > {{row.time_filter}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="vola_filter">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>vola_filter</th>
+      <td mat-cell *matCellDef="let row" > {{row.vola_filter}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="start_time">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>start_time</th>
+      <td mat-cell *matCellDef="let row" > {{row.start_time}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="end_time">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>end_time</th>
+      <td mat-cell *matCellDef="let row" > {{row.end_time}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="atr_window" class="text-center">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>atr_window</th>
+      <td mat-cell *matCellDef="let row" > {{row.atr_window}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="decil_window">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>decil_window</th>
+      <td mat-cell *matCellDef="let row" > {{row.decil_window}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="vola_filter_side">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>vola_filter_side</th>
+      <td mat-cell *matCellDef="let row" > {{row.vola_filter_side}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="vola_filter_value">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>vola_filter_value</th>
+      <td mat-cell *matCellDef="let row" > {{row.vola_filter_value}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="take_profit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>take_profit</th>
+      <td mat-cell *matCellDef="let row" > {{row.take_profit}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="stop_loss">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>stop_loss</th>
+      <td mat-cell *matCellDef="let row" >{{row.stop_loss}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="middle_line_window">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>middle_line_window</th>
+      <td mat-cell *matCellDef="let row" class="text-center">{{row.middle_line_window}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="new_volume">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>new_volume</th>
+      <td mat-cell *matCellDef="let row" class="text-center"> {{row.new_volume}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="step_size">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>step_size</th>
+      <td mat-cell *matCellDef="let row" > {{row.step_size}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="step_quantity">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>step_quantity</th>
+      <td mat-cell *matCellDef="let row" > {{row.step_quantity}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="hard_stop_loss">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>hard_stop_loss</th>
+      <td mat-cell *matCellDef="let row" > {{row.hard_stop_loss}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="zero_line">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>zero_line</th>
+      <td mat-cell *matCellDef="let row" > {{row.zero_line}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="candles" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>candles</th>
+        <td mat-cell *matCellDef="let row"  class="text-center"> {{row.candles}} </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row class="example-element-row" (click)="openGraphModal(row)" *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+  </div>
+  
+  <div #graph_statistick id="graph_statistick" data-backdrop="static" class="modal">
+    <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+        <div class="modal-body">
+          <mat-spinner color="accent" [diameter]="60" *ngIf="modal_spinner"></mat-spinner>
+          <div id="chartdiv_statistick"></div>
+        </div>
+        <div class="modal-footer">
+          <button mat-raised-button data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

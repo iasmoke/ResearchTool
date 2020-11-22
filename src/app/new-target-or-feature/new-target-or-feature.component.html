@@ -1,0 +1,50 @@
+<div class="container-fluid p-2">
+  <div class="row mb-2">
+    <div class="col-md-2">
+    <div class="card text-center p-2">Type</div>
+  </div>
+  <div class="col-md-2">
+      <select class="form-control">
+          <option>Target</option>
+          <option>Feature</option>
+        </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-2">
+    <div class="card text-center p-2">Name</div>
+  </div>
+  <div class="col-md-2">
+  <input class="form-control" type="text" placeholder="Your Name">
+</div>
+</div>
+  <div class="container-fluid">
+    <form class="form-group mt-3 row" *ngFor="let form of parameter; let i = index">
+    <div class=" card text-center p-2 mr-2" ngDefaultControl [(ngModel)]="form.parameterName" [ngModelOptions]="{standalone: true}">Parameter Name</div>
+    <input class="form-control mr-2" type="text" style="width: 8em; height: 3em;" ngDefaultControl [(ngModel)]="form.parameterNameText" [ngModelOptions]="{standalone: true}">
+    <div class="card text-center p-2 mr-2" ngDefaultControl [(ngModel)]="form.variableName" [ngModelOptions]="{standalone: true}">Variable Name</div>
+    <input class="form-control mr-2" type="text" style="width: 8em; height: 3em;" ngDefaultControl [(ngModel)]="form.variableNameText" [ngModelOptions]="{standalone: true}">
+    <div class="card text-center p-2 mr-2">Variable Values</div>
+    
+      <span class="input-group-text mr-1">from</span>
+      <input class="form-control mr-1" type="number" style="width: 4em; height: 3em;" ngDefaultControl [(ngModel)]="form.fromValue" [ngModelOptions]="{standalone: true}">
+   
+      <span class="input-group-text mr-1">to</span>
+      <input class="form-control mr-1" type="number" style="width: 4em; height: 3em;" ngDefaultControl [(ngModel)]="form.toValue" [ngModelOptions]="{standalone: true}">
+   
+    
+        <span class="input-group-text mr-1">step</span>
+        <input class="form-control mr-1" type="number" style="width: 4em; height: 3em;" ngDefaultControl [(ngModel)]="form.stepValue" [ngModelOptions]="{standalone: true}">
+        <button [class.btn-danger]="i !== (parameter.length - 1)" class="btn btn-primary btn-add" type="button" (click)="i !== (parameter.length - 1) ? removeParameter(i) : addParameter()">
+            <span>{{ i == parameter.length - 1 ? '+' : '-' }}</span>
+        </button>
+  </form>
+      <label class="btn btn-primary">Load code<input type="file" style="display: none;">
+        </label>
+        <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Close</button>
+        <button class="col-1 btn btn-primary" type="button">Save</button>
+     </div>
+    </div>
+    </div>
+

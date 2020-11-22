@@ -1,0 +1,220 @@
+<div class="container-fluid mt-2">
+  <div class="row">
+    <div class="col-6">
+      <h3 class="">Targets</h3>
+      <div class="row mb-2 ml-2">
+        <mat-form-field>
+          <mat-select [(ngModel)]="target_name" (ngModelChange)="changeTarget()">
+            <mat-option [value]="row_target_name" *ngFor="let row_target_name of targets_names;">
+              {{row_target_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button class="ml-auto" [disabled]="target_name === null || target_name === undefined"
+          color="primary" (click)="newTargetCopy()">Copy</button>
+        <button mat-raised-button color="primary" [disabled]="def_target === 1" (click)="targetUpdate()">Save</button>
+      </div>
+      <mat-card class="top-card">
+        <button mat-icon-button [hidden]="parameter_target === null || parameter_target === undefined">
+          <mat-icon (click)="header_target_card = !header_target_card">edit</mat-icon>
+        </button>
+        <div class="parameter_traget_style" *ngIf="header_target_card ? true : false"
+          [hidden]="parameter_target === null || parameter_target === undefined">
+          <div class="col-6">
+            <h3 style="text-align: center;">{{target_name_settings}}</h3>
+          </div>
+          <div class="col-6">
+            <p style="height: 100px;text-align: center;">{{parameter_traget_description}}</p>
+          </div>
+        </div>
+        <div class="parameter_traget_style" *ngIf="header_target_card ? false : true"
+          [hidden]="parameter_target === null || parameter_target === undefined">
+          <mat-form-field class="col-6">
+            <input matInput placeholder="Target name" [disabled]="def_target === 1" [(ngModel)]="target_name_settings"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+          <mat-form-field class="col-6">
+            <textarea matInput class="text_description" placeholder="Description" [disabled]="def_target === 1"
+              [(ngModel)]="parameter_traget_description" [ngModelOptions]="{standalone: true}">
+          {{parameter_traget_description}}
+        </textarea>
+          </mat-form-field>
+        </div>
+        <div class="example-container-target-feature" *ngFor="let row_parameter_target of parameter_target">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Parameter name</mat-label>
+            <input matInput [disabled]="def_target === 1" [(ngModel)]="row_parameter_target.parameter_name"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Variable name</mat-label>
+            <input matInput [disabled]="def_target === 1" [(ngModel)]="row_parameter_target.value_name"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;" appearance="outline">
+            <mat-label>Start value</mat-label>
+            <input matInput [disabled]="def_target === 1" type="number" [(ngModel)]="row_parameter_target.start_value"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;" appearance="outline">
+            <mat-label>End value</mat-label>
+            <input matInput [disabled]="def_target === 1" type="number" [(ngModel)]="row_parameter_target.stop_value"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;" appearance="outline">
+            <mat-label>Step value</mat-label>
+            <input matInput [disabled]="def_target === 1" type="number" [(ngModel)]="row_parameter_target.step_value"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;">
+            <mat-label>Type</mat-label>
+            <mat-select [disabled]="def_target === 1" [(ngModel)]="row_parameter_target.type"
+              [ngModelOptions]="{standalone: true}">
+              <mat-option value="int">int</mat-option>
+              <mat-option value="float">float</mat-option>
+              <mat-option value="boolean">boolean</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card>
+      <mat-card class="mt-2 height_card">
+        <pre>{{file_text_target}}</pre>
+      </mat-card>
+    </div>
+    <div class="col-6">
+      <h3 class="">Features</h3>
+      <div class="row mb-2 ml-2">
+        <mat-form-field>
+          <mat-select [(ngModel)]="feature_name" (ngModelChange)="changeFeature()">
+            <mat-option [value]="row_feature_name" *ngFor="let row_feature_name of features_names;">
+              {{row_feature_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button class="ml-auto" color="primary" [disabled]="def_feature === 1"
+          (click)="featureUpdate()">Save</button>
+      </div>
+      <mat-card class="top-card">
+
+        <button mat-icon-button [hidden]="parameter_feature === null || parameter_feature === undefined">
+          <mat-icon (click)="header_feature_card = !header_feature_card">edit</mat-icon>
+        </button>
+        <div class="parameter_traget_style" *ngIf="header_feature_card ? true : false"
+          [hidden]="parameter_feature === null || parameter_feature === undefined">
+          <div class="col-6">
+            <h3 style="text-align: center;">{{feature_name_settings}}</h3>
+          </div>
+          <div class="col-6">
+            <p style="height: 100px;text-align: center;">{{parameter_feature_description}}</p>
+          </div>
+        </div>
+        <div class="parameter_traget_style" *ngIf="header_feature_card ? false : true"
+          [hidden]="parameter_feature === null || parameter_feature === undefined">
+          <mat-form-field class="col-6">
+            <input matInput placeholder="Feature name" [disabled]="def_feature === 1" [(ngModel)]="feature_name_settings"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+          <mat-form-field class="col-6">
+            <textarea matInput class="text_description" placeholder="Description" [disabled]="def_feature === 1"
+              [(ngModel)]="parameter_feature_description" [ngModelOptions]="{standalone: true}">
+          {{parameter_feature_description}}
+        </textarea>
+          </mat-form-field>
+        </div>
+        <div class="example-container-target-feature" *ngFor="let row_parameter_feature of parameter_feature">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Variable name</mat-label>
+            <input matInput [(ngModel)]="row_parameter_feature.value_name" [disabled]="def_feature === 1"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;" appearance="outline">
+            <mat-label>Start value</mat-label>
+            <input matInput type="number" [disabled]="def_feature === 1" [(ngModel)]="row_parameter_feature.start_value"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;" appearance="outline">
+            <mat-label>End value</mat-label>
+            <input matInput type="number" [disabled]="def_feature === 1" [(ngModel)]="row_parameter_feature.stop_value"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;" appearance="outline">
+            <mat-label>Step value</mat-label>
+            <input matInput type="number" [disabled]="def_feature === 1" [(ngModel)]="row_parameter_feature.step_value"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <mat-form-field style="width: 6rem;">
+            <mat-label>Type</mat-label>
+            <mat-select [(ngModel)]="row_parameter_feature.type" [disabled]="def_feature === 1"
+              [ngModelOptions]="{standalone: true}">
+              <mat-option value="int">int</mat-option>
+              <mat-option value="float">float</mat-option>
+              <mat-option value="boolean">boolean</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </mat-card>
+      <mat-card class="mt-2 height_card">
+        <pre>{{file_text_feature}}</pre>
+      </mat-card>
+    </div>
+
+  </div>
+</div>
+
+<div #myModalError_feature_update id="myModalError_feature_update" class="modal fade">
+  <div class="modal-dialog">
+    <div [class.alert-success]="error_feature === 'Feature updated successfully'"
+      [class.alert-danger]="error_feature !== 'Feature updated successfully'" class="alert text-center" role="alert">
+      {{error_feature}}
+    </div>
+  </div>
+</div>
+
+<div #myModalError_target_update id="myModalError_target_update" class="modal fade">
+  <div class="modal-dialog">
+    <div [class.alert-success]="error_target === 'Target updated successfully'"
+      [class.alert-danger]="error_target !== 'Target updated successfully'" class="alert text-center" role="alert">
+      {{error_target}}
+    </div>
+  </div>
+</div>
+
+<div #copy_target id="copy_target" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        New target name
+      </div>
+      <div class="modal-body">
+        <mat-form-field class="col-6">
+          <input matInput placeholder="Target name" [(ngModel)]="target_name_copy"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+      </div>
+      <div class="modal-footer">
+        <button mat-raised-button (click)="copyTarget()">Copy</button>
+        <button mat-raised-button class="ml-auto" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #mess_done id="mess_done" class="modal fade" data-backdrop='false'>
+  <div class="modal-dialog">
+    <div class="alert alert-success text-center" role="alert">
+      {{ mess_done_text }}
+    </div>
+  </div>
+</div>
